@@ -4,6 +4,8 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using Autodesk.Revit.DB.Plumbing;
+using Autodesk.Revit.DB.Mechanical;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,6 +41,18 @@ namespace RAB_Session_04_Challenge
                         lineList.Add(curve);
                 }
             }
+
+            Transaction t = new Transaction(doc);
+            t.Start("Reveal Message");
+
+            WallType curWT1 = Utils.GetWallTypeByName(doc, "Storefront");
+            WallType curWT2 = Utils.GetWallTypeByName(doc, "Generic - 8\"");
+
+            MEPSystemType pipeSystemType = Utils.GetMEPSystemTypeByName(doc, "Domestic Hot Water");
+            PipeType pipeType = Utils.GetPipeTypeByName(doc, "Default");
+
+            MEPSystemType ductSystemType = Utils.GetMEPSystemTypeByName(doc, "Supply Air");
+            DuctType ductType = Utils.GetDuctTypeByName(doc, "Default");
 
             TaskDialog.Show("Results", "You have selected " + lineList.Count + " lines.");
 

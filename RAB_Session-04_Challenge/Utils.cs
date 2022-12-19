@@ -11,7 +11,7 @@ using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 
-namespace RAB_Session_04_Skills
+namespace RAB_Session_04_Challenge
 {
     internal static class Utils
     {

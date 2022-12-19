@@ -25,7 +25,22 @@ namespace RAB_Session_04_Challenge
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
+            IList<Element> pickList = uidoc.Selection.PickElementsByRectangle("Select elements");
 
+            List<CurveElement> lineList = new List<CurveElement>();
+
+            foreach (Element element in pickList)
+            {
+                if (element is CurveElement)
+                {
+                    CurveElement curve = (CurveElement)element;
+
+                    if (curve.CurveElementType == CurveElementType.ModelCurve)
+                        lineList.Add(curve);
+                }
+            }
+
+            TaskDialog.Show("Results", "You have selected " + lineList.Count + " lines.");
 
             return Result.Succeeded;
         }

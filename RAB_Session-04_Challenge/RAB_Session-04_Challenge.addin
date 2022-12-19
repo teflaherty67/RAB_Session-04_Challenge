@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>RAB_Session-04_Challenge</Text>
+    <Description>Hidden Meesage</Description>
+    <Assembly>RAB_Session-04_Challenge.dll</Assembly>
+    <FullClassName>RAB_Session_04_Challenge.Command</FullClassName>
+    <ClientId>9b441b37-67ff-40c6-a909-c49300f5fbf7</ClientId>
+    <VendorId>T Edward</VendorId>
+    <VendorDescription>T Edward Coder</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application RAB_Session-04_Challenge</Name>
+    <Assembly>RAB_Session-04_Challenge.dll</Assembly>
+    <FullClassName>RAB_Session_04_Challenge.App</FullClassName>
+    <ClientId>a856382f-82bd-44d1-bb53-709b1680cc3b</ClientId>
+    <VendorId>T Edward</VendorId>
+    <VendorDescription>T Edward Coder</VendorDescription>
+  </AddIn>
+</RevitAddIns>

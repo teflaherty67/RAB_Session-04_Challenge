@@ -27,21 +27,25 @@ namespace RAB_Session_04_Challenge
             Application app = uiapp.Application;
             Document doc = uidoc.Document;
 
+            // prompt user to select elements
+
+            TaskDialog.Show("Select lines", "Select lines to convert to Revit elements.");
             IList<Element> pickList = uidoc.Selection.PickElementsByRectangle("Select elements");
 
-            List<CurveElement> lineList = new List<CurveElement>();
+            // filter selected elements
+
+            List<CurveElement> filteredList = new List<CurveElement>();            
 
             foreach (Element element in pickList)
             {
                 if (element is CurveElement)
                 {
                     CurveElement curve = element as CurveElement;                    
-                    lineList.Add(curve);
+                    filteredList.Add(curve);
                 }
-            }
+            }            
 
-            Transaction t = new Transaction(doc);
-            t.Start("Reveal Message");
+            // get types by name
 
             Level curLevel = Utils.GetLevelByName(doc, "Level 1");
             WallType curWT1 = Utils.GetWallTypeByName(doc, "Storefront");
@@ -53,40 +57,45 @@ namespace RAB_Session_04_Challenge
             MEPSystemType ductSystemType = Utils.GetMEPSystemTypeByName(doc, "Supply Air");
             DuctType ductType = Utils.GetDuctTypeByName(doc, "Default");
 
-            foreach (CurveElement curCurve in lineList)
-            {
-                GraphicsStyle curGS = curCurve.LineStyle as GraphicsStyle; 
+            // loop through selected CurveElements
 
-                Curve curve = curCurve.GeometryCurve;
-                // Tom: I got an error at this line. Try moving these variables inside your case statements 
-                // for the ducts and pipes. The issue is that some of the lines are actually arcs and that's causing an error
-                // since they don't have end points. 
-                // An alternate method would be to put a try/catch statement around those two lines
-                XYZ startPoint = curve.GetEndPoint(0);
-                XYZ endPoint = curve.GetEndPoint(1);
+            Transaction t = new Transaction(doc);
+            t.Start("Reveal Message");
+
+            foreach (CurveElement curCurve in filteredList)
+            {
+                // get Curve and GraphicsStyle for each CurveElement
+
+                Curve elemCurve = curCurve.GeometryCurve;
+                GraphicsStyle curGS = curCurve.LineStyle as GraphicsStyle;
+
+                // create wall, duct or pipe
 
                 switch (curGS.Name)
                 {
-                    case "A-GALZ":
-                        Wall newWall1 = Wall.Create(doc, curve, curWT1.Id, curLevel.Id, 20, 0, false, false);
+                    case "A-GLAZ":
+                        Wall newWall1 = Wall.Create(doc, elemCurve, curWT1.Id, curLevel.Id, 20, 0, false, false);
                         break;
 
                     case "A-WALL":
-                        Wall newWall2 = Wall.Create(doc, curve, curWT2.Id, curLevel.Id, 20, 0, false, false);
+                        Wall newWall2 = Wall.Create(doc, elemCurve, curWT2.Id, curLevel.Id, 20, 0, false, false);
                         break;
 
                     case "M-DUCT":
-                        Duct newDuct = Duct.Create(doc, ductSystemType.Id, ductType.Id, curLevel.Id, startPoint, endPoint);
+                        // Duct newDuct = Duct.Create(doc, ductSystemType.Id, ductType.Id, curLevel.Id, startPoint, endPoint);
                         break;
 
                     case "P-PIPE":
-                        Pipe newPipe = Pipe.Create(doc, pipeSystemType.Id, pipeType.Id, curLevel.Id, startPoint, endPoint);
+                        // Pipe newPipe = Pipe.Create(doc, pipeSystemType.Id, pipeType.Id, curLevel.Id, startPoint, endPoint);
                         break;
 
                     default:
                         break;
                 }
-            }   
+            }
+            
+            t.Commit();
+            t.Dispose();
 
             return Result.Succeeded;
         }

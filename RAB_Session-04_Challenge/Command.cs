@@ -58,6 +58,10 @@ namespace RAB_Session_04_Challenge
                 GraphicsStyle curGS = curCurve.LineStyle as GraphicsStyle; 
 
                 Curve curve = curCurve.GeometryCurve;
+                // Tom: I got an error at this line. Try moving these variables inside your case statements 
+                // for the ducts and pipes. The issue is that some of the lines are actually arcs and that's causing an error
+                // since they don't have end points. 
+                // An alternate method would be to put a try/catch statement around those two lines
                 XYZ startPoint = curve.GetEndPoint(0);
                 XYZ endPoint = curve.GetEndPoint(1);
 

@@ -70,5 +70,20 @@ namespace RAB_Session_04_Challenge
 
             return null;
         }
+
+        internal static Level GetLevelByName(Document doc, string levelName)
+        {
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfClass(typeof(Level));
+
+            foreach (Level curLevel in collector)
+            {
+                if (curLevel.Name == levelName)
+                    return curLevel;
+            }
+
+            return null;
+        }
+
     }
 }

@@ -35,16 +35,15 @@ namespace RAB_Session_04_Challenge
             {
                 if (element is CurveElement)
                 {
-                    CurveElement curve = (CurveElement)element;
-
-                    if (curve.CurveElementType == CurveElementType.ModelCurve)
-                        lineList.Add(curve);
+                    CurveElement curve = element as CurveElement;                    
+                    lineList.Add(curve);
                 }
             }
 
             Transaction t = new Transaction(doc);
             t.Start("Reveal Message");
 
+            Level curLevel = Utils.GetLevelByName(doc, "Level 1");
             WallType curWT1 = Utils.GetWallTypeByName(doc, "Storefront");
             WallType curWT2 = Utils.GetWallTypeByName(doc, "Generic - 8\"");
 
@@ -54,7 +53,37 @@ namespace RAB_Session_04_Challenge
             MEPSystemType ductSystemType = Utils.GetMEPSystemTypeByName(doc, "Supply Air");
             DuctType ductType = Utils.GetDuctTypeByName(doc, "Default");
 
-            TaskDialog.Show("Results", "You have selected " + lineList.Count + " lines.");
+            foreach (CurveElement curCurve in lineList)
+            {
+                GraphicsStyle curGS = curCurve.LineStyle as GraphicsStyle;
+                Debug.Print(curGS.Name);
+
+                Curve curve = curCurve.GeometryCurve;
+                XYZ startPoint = curve.GetEndPoint(0);
+                XYZ endPoint = curve.GetEndPoint(1);
+
+                switch (curGS.Name)
+                {
+                    case "A-GALZ":
+                        Wall newWall1 = Wall.Create(doc, curve, curWT1.Id, curLevel.Id, 20, 0, false, false);
+                        break;
+
+                    case "A-WALL":
+                        Wall newWall2 = Wall.Create(doc, curve, curWT2.Id, curLevel.Id, 20, 0, false, false);
+                        break;
+
+                    case "M-DUCT":
+                        Duct newDuct = Duct.Create(doc, ductSystemType.Id, ductType.Id, curLevel.Id, startPoint, endPoint);
+                        break;
+
+                    case "P-PIPE":
+                        Pipe newPipe = Pipe.Create(doc, pipeSystemType.Id, pipeType.Id, curLevel.Id, startPoint, endPoint);
+                        break;
+
+                    default:
+                        break;
+                }
+            }   
 
             return Result.Succeeded;
         }

@@ -55,8 +55,7 @@ namespace RAB_Session_04_Challenge
 
             foreach (CurveElement curCurve in lineList)
             {
-                GraphicsStyle curGS = curCurve.LineStyle as GraphicsStyle;
-                Debug.Print(curGS.Name);
+                GraphicsStyle curGS = curCurve.LineStyle as GraphicsStyle; 
 
                 Curve curve = curCurve.GeometryCurve;
                 XYZ startPoint = curve.GetEndPoint(0);

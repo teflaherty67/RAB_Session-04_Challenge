@@ -29,6 +29,13 @@ namespace RAB_Session_04_Challenge
             return null;
         }
 
+        internal static Wall CreateWall(Document doc, Curve curve, WallType wt, Level level)
+        {
+            Wall curWall = Wall.Create(doc, curve, wt.Id, level.Id, 20, 0, false, false);
+
+            return curWall;
+        }
+
         internal static MEPSystemType GetMEPSystemTypeByName(Document doc, string mepSystemType)
         {
             FilteredElementCollector collector = new FilteredElementCollector(doc);
